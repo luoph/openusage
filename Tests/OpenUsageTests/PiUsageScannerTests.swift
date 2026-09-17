@@ -63,9 +63,12 @@ final class PiUsageScannerTests: XCTestCase {
         XCTAssertEqual(entry?.tokens.cacheWrite5m, 600)
     }
 
-    func testMapsCodexAndSkipsUnmappedAndNonAssistant() {
+    func testMapsCodexAndKeepsUnmappedButSkipsNonAssistant() {
         XCTAssertEqual(PiUsageScanner.parseLine(line(provider: "openai-codex"))?.cardID, "codex")
-        XCTAssertNil(PiUsageScanner.parseLine(line(provider: "nvidia-nim")))
+        // A provider with no card of its own is still parsed — the pi card is where it shows up.
+        let unmapped = PiUsageScanner.parseLine(line(provider: "deepseek"))
+        XCTAssertNil(unmapped?.cardID)
+        XCTAssertEqual(unmapped?.piProvider, "deepseek")
         let userLine = Data(#"{"type":"message","timestamp":"2026-07-12T10:00:00.000Z","message":{"role":"user","provider":"anthropic","usage":{}}}"#.utf8)
         XCTAssertNil(PiUsageScanner.parseLine(userLine))
     }
@@ -133,6 +136,27 @@ final class PiUsageScannerTests: XCTestCase {
             cardID: "claude", since: .distantPast, pricing: .empty
         )
         XCTAssertTrue(scan.series.daily.isEmpty)
+    }
+
+    /// The pi card's own aggregation: a nil card counts every request pi made, including providers
+    /// with no OpenUsage card of their own.
+    func testNilCardAggregatesEveryProvider() {
+        let entries = [
+            PiUsageScanner.parseLine(line(id: "a", provider: "anthropic", cost: "0.5"))!,
+            PiUsageScanner.parseLine(line(id: "b", provider: "openai-codex", cost: "0.25"))!,
+            PiUsageScanner.parseLine(line(id: "c", provider: "deepseek", model: "deepseek-flash", cost: "0.125"))!
+        ]
+        let scan = PiUsageScanner.aggregate(entries: entries, cardID: nil, since: .distantPast, pricing: .empty)
+        XCTAssertEqual(scan.series.daily.first?.costUSD ?? 0, 0.875, accuracy: 0.0001)
+        XCTAssertEqual(scan.series.daily.first?.totalTokens, 450)
+    }
+
+    /// The unmapped provider carries pi's own cost, so the pi card prices it without any pricing data.
+    func testUnmappedProviderUsesCarriedCost() {
+        let entry = PiUsageScanner.parseLine(line(provider: "deepseek", model: "deepseek-flash", cost: "0.0125"))!
+        let scan = PiUsageScanner.aggregate(entries: [entry], cardID: nil, since: .distantPast, pricing: .empty)
+        XCTAssertEqual(scan.series.daily.first?.costUSD ?? 0, 0.0125, accuracy: 0.000_001)
+        XCTAssertEqual(scan.modelUsage?.daily.first?.models.first?.model, "deepseek-flash")
     }
 
     // MARK: - Mapping and merge

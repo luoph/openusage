@@ -66,6 +66,7 @@ enum ProviderCatalog {
             OllamaProvider(),
             OpenCodeProvider(),
             OpenRouterProvider(),
+            PiProvider(),
             ZAIProvider()
         ]
         return providers

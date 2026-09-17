@@ -297,7 +297,7 @@ final class ClaudeProvider: ProviderRuntime {
         // Both scans run on their scanner actors, off the main actor, and do not require an OAuth login.
         let pricing = await pricing()
         let nativeScan = await logUsageScanner.scan(now: now(), pricing: pricing)
-        let piScan = allowsUnattributedPiUsage
+        let piScan = allowsUnattributedPiUsage && PiProviderMapping.foldsIntoProviderCards
             ? await PiUsageScanner.shared.scan(cardID: provider.id, now: now(), pricing: pricing)
             : nil
         var usageHistory: ProviderUsageHistory?

@@ -1,8 +1,8 @@
 import Foundation
 
-/// Builds a per-day token/cost series from pi's session logs for one OpenUsage card, so usage that
-/// happened inside pi (e.g. a Claude sub driven through pi) folds into that card's Usage Trend and
-/// spend tiles alongside its native source.
+/// Builds a per-day token/cost series from pi's session logs, either for pi's own card (every request
+/// pi made, whatever model it drove) or for one underlying provider's card (the slice of pi usage that
+/// belongs to that provider's subscription).
 ///
 /// Pi records an authoritative per-message `usage.cost.total` (like OpenCode), so that carried cost is
 /// used when present; when pi logs a `$0` cost (subscription usage it doesn't impute), the tokens are
@@ -27,7 +27,9 @@ actor PiUsageScanner {
 
     private static let sharedScanner = IncrementalJSONLScanner<Entry>(
         logTag: LogTag.plugin("pi"),
-        persistence: JSONLScanCachePersistence(namespace: "pi", schemaVersion: 1)
+        // Schema 2: entries keep every pi provider (not just the mapped ones) and carry the raw pi
+        // provider id, so a schema-1 cache would be missing the rows the pi card needs.
+        persistence: JSONLScanCachePersistence(namespace: "pi", schemaVersion: 2)
     )
 
     static func flushPersistentCacheWrites() async {
@@ -49,7 +51,12 @@ actor PiUsageScanner {
     struct Entry: Codable, Sendable, Equatable {
         var id: String?
         var timestamp: Date
-        var cardID: String
+        /// The underlying provider's OpenUsage card, or nil when pi drove a provider OpenUsage has no
+        /// card for (DeepSeek, an OpenAI-compatible endpoint, …). Every line is kept either way: the pi
+        /// card counts them all, and a provider card filters to its own.
+        var cardID: String?
+        /// pi's own `provider` value, kept so the pi card can report usage per underlying provider.
+        var piProvider: String
         var model: String
         /// pi's own `usage.cost.total`, used directly when > 0; nil/0 falls through to engine pricing.
         var carriedCost: Double?
@@ -59,10 +66,11 @@ actor PiUsageScanner {
         var reportedTotalTokens: Int
     }
 
-    /// Scan the last `daysBack` days of pi logs for one card. Returns nil when pi's sessions directory
-    /// has no log files at all, so a provider with no pi usage folds in nothing.
+    /// Scan the last `daysBack` days of pi logs. Pass a `cardID` to get only the slice belonging to that
+    /// provider's card; pass nil (what the pi card does) to get every request pi made. Returns nil when
+    /// pi's sessions directory has no log files at all, so a caller with no pi usage folds in nothing.
     func scan(
-        cardID: String, daysBack: Int = 30, now: Date = Date(), pricing: ModelPricing,
+        cardID: String?, daysBack: Int = 30, now: Date = Date(), pricing: ModelPricing,
         estimateCost: CostEstimator? = nil
     ) async -> LogUsageScan? {
         let directory = PiPaths.sessionsDirectory(environment: environment, homeDirectory: homeDirectory())
@@ -90,8 +98,9 @@ actor PiUsageScanner {
 
     // MARK: - Parsing
 
-    /// Parse every mapped assistant usage line of one session file. Lines for pi providers OpenUsage
-    /// doesn't track are dropped here so they never reach aggregation.
+    /// Parse every assistant usage line of one session file, including lines for pi providers that have
+    /// no OpenUsage card of their own — those are what the pi card is for. Filtering happens in
+    /// `aggregate`, not here.
     static func parseFile(_ data: Data) -> [Entry] {
         let marker = Data(#""usage":{"#.utf8)
         var entries: [Entry] = []
@@ -110,7 +119,6 @@ actor PiUsageScanner {
               let message = object["message"] as? [String: Any],
               message["role"] as? String == "assistant",
               let providerID = message["provider"] as? String,
-              let cardID = PiProviderMapping.cardID(forPiProvider: providerID),
               let usage = message["usage"] as? [String: Any]
         else { return nil }
 
@@ -128,7 +136,8 @@ actor PiUsageScanner {
         return Entry(
             id: object["id"] as? String,
             timestamp: timestamp,
-            cardID: cardID,
+            cardID: PiProviderMapping.cardID(forPiProvider: providerID),
+            piProvider: providerID,
             model: (message["model"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
             carriedCost: carriedCost,
             tokens: tokens,
@@ -151,17 +160,17 @@ actor PiUsageScanner {
         return out
     }
 
-    /// Bucket the card's entries into local calendar days. Cost is pi's carried total when it recorded
-    /// one, else the tokens priced through `pricing`; a model that can't be priced and carries no cost
-    /// is excluded from the totals and surfaced as the tile's unknown-model warning, matching the log
-    /// scanners.
+    /// Bucket entries into local calendar days — the ones matching `cardID`, or all of them when it is
+    /// nil (the pi card). Cost is pi's carried total when it recorded one, else the tokens priced
+    /// through `pricing`; a model that can't be priced and carries no cost is excluded from the totals
+    /// and surfaced as the tile's unknown-model warning, matching the log scanners.
     static func aggregate(
-        entries: [Entry], cardID: String, since: Date, pricing: ModelPricing,
+        entries: [Entry], cardID: String?, since: Date, pricing: ModelPricing,
         estimateCost: CostEstimator? = nil
     ) -> LogUsageScan {
         let estimate = estimateCost ?? { pricing.estimatedCostDollars(model: $0, tokens: $1) }
         var accumulator = DailyUsageAccumulator()
-        for entry in entries where entry.cardID == cardID && entry.timestamp >= since {
+        for entry in entries where (cardID == nil || entry.cardID == cardID) && entry.timestamp >= since {
             let day = DailyUsageAccumulator.dayKey(from: entry.timestamp)
             let trimmedModel = entry.model.nilIfEmpty
             let modelName = trimmedModel ?? ModelUsageEntry.unattributedModelName

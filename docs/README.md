@@ -33,6 +33,7 @@ What each provider tracks, where its credentials come from, and what to do when 
 - [Ollama](providers/ollama.md)
 - [OpenCode](providers/opencode.md)
 - [OpenRouter](providers/openrouter.md)
+- [Pi](providers/pi.md)
 - [Z.ai](providers/zai.md)
 
 ## For developers

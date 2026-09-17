@@ -206,6 +206,15 @@ extension OpenCodeUsageError: CategorizedError {
     }
 }
 
+extension PiUsageError: CategorizedError {
+    var errorCategory: ErrorCategory {
+        switch self {
+        // Pi has no login; "no session logs" is the same expected not-set-up state as a missing one.
+        case .notDetected: .notLoggedIn
+        }
+    }
+}
+
 extension OpenRouterAuthError: CategorizedError {
     var errorCategory: ErrorCategory {
         switch self {

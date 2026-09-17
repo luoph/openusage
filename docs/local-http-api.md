@@ -114,6 +114,7 @@ For bounded progress resources, `unit` follows the provider's live metric format
 | Grok | `weekly` |
 | OpenCode | `session`, `weekly`, `monthly` |
 | OpenRouter | `credits`, `balance`, `keyLimit` |
+| Pi | _none_ — pi has no account quota, only spend history |
 | Z.ai | `session`, `weekly`, `webSearches` |
 
 Charts, colors, subtitles, formatted badges, layout state, and historical spend periods stay out of this

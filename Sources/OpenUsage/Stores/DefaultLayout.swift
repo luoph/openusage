@@ -49,6 +49,8 @@ enum DefaultLayout {
         "openrouter.credits", "openrouter.balance",
         "openrouter.today", "openrouter.week", "openrouter.month", "openrouter.keyLimit",
 
+        "pi.trend", "pi.today", "pi.yesterday", "pi.last30",
+
         "zai.session", "zai.weekly", "zai.webSearches"
     ]
 
@@ -121,6 +123,9 @@ enum DefaultLayout {
         // OpenRouter: Credits meter + Balance stay above the fold; period spend and the per-key cap
         // sit below the caret.
         "openrouter.today", "openrouter.week", "openrouter.month", "openrouter.keyLimit",
+        // Pi: no account meters exist, so the Usage Trend is the card's Always Visible row and the
+        // spend tiles sit below the caret, matching every other log-scanned provider.
+        "pi.today", "pi.yesterday", "pi.last30",
         // Z.ai: Session meter stays above the fold; Web Searches (monthly count) sits below the caret.
         "zai.webSearches"
     ]

@@ -163,10 +163,11 @@ final class CodexProvider: ProviderRuntime {
         async let native = logUsageScanner.scan(
             now: now(), pricing: pricing, fallbackModel: selectedFallbackModel
         )
-        async let pi = allowsUnattributedHistory ? PiUsageScanner.shared.scan(
-            cardID: provider.id, now: now(), pricing: pricing,
-            estimateCost: { CodexUsagePricing.estimatedCost(pricing: pricing, model: $0, tokens: $1) }
-        )
+        async let pi = allowsUnattributedHistory && PiProviderMapping.foldsIntoProviderCards
+            ? PiUsageScanner.shared.scan(
+                cardID: provider.id, now: now(), pricing: pricing,
+                estimateCost: { CodexUsagePricing.estimatedCost(pricing: pricing, model: $0, tokens: $1) }
+            )
             : nil
         async let openCode = allowsUnattributedHistory
             ? openCodeUsageScanner.scan(now: now(), pricing: pricing) : nil

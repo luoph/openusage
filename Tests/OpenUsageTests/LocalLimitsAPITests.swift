@@ -214,6 +214,8 @@ final class LocalLimitsAPITests: XCTestCase {
             "ollama": ["session", "weekly"],
             "opencode": ["session", "weekly", "monthly"],
             "openrouter": ["credits", "balance", "keyLimit"],
+            // Pi is spend-only: a local agent with no account, so it publishes no quota resources.
+            "pi": [],
             "zai": ["session", "weekly", "webSearches"]
         ]
 
