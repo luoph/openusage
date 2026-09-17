@@ -95,7 +95,7 @@ struct APIKeysSection: View {
                         ghostButton("Cancel") { overrideChecked = false; input = "" }
                     }
                 } else {
-                    Toggle("Override With a Custom Key", isOn: $overrideChecked)
+                    Toggle(L10n.t("Override With a Custom Key"), isOn: $overrideChecked)
                         .toggleStyle(.checkbox)
                         .font(.caption)
                 }
@@ -106,7 +106,7 @@ struct APIKeysSection: View {
                 keyField(editable: false)
             }
             if let actionError {
-                Text(actionError)
+                Text(localized: actionError)
                     .font(.caption)
                     .foregroundStyle(Theme.notice)
             }

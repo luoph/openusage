@@ -17,7 +17,7 @@ struct UpdateBannerCard: View {
         DismissableHintCard(
             systemImage: "arrow.down.circle",
             title: "Update Available",
-            message: "OpenUsage \(version) is ready to download.",
+            message: L10n.format("OpenUsage %@ is ready to download.", version),
             buttonTitle: "Install Update",
             action: { updater.installAvailableUpdate() },
             onDismiss: { withAnimation(Motion.spring) { updater.dismissAvailableUpdate() } }

@@ -61,11 +61,11 @@ struct WidgetGroupedListView: View {
         .contextMenu {
             // Hides the whole provider section (the Customize provider list brings it back). Mirrors
             // the per-metric "Hide" but one level up, so the verb order reads the same on a header as a row.
-            Button("Hide \(group.provider.displayName)") {
+            Button(L10n.format("Hide %@", group.provider.displayName)) {
                 container.enablement.setEnabled(false, for: group.provider.id)
             }
             Divider()
-            Button("Refresh \(group.provider.displayName)") {
+            Button(L10n.format("Refresh %@", group.provider.displayName)) {
                 Task { await dataStore.refresh(providerID: group.provider.id, force: true) }
             }
             Button(L10n.t("Customize…")) {
@@ -252,7 +252,7 @@ struct WidgetGroupedListView: View {
             layout.setMetricEnabled(descriptor.id, false)
         }
         if descriptor.pinnable {
-            Button(layout.isPinned(descriptor.id) ? "Unstar" : "Star for menu bar") {
+            Button(L10n.t(layout.isPinned(descriptor.id) ? "Unstar" : "Star for menu bar")) {
                 if layout.isPinned(descriptor.id) {
                     layout.setPinned(false, for: descriptor.id)
                 } else if layout.canPin(descriptor.id) {
@@ -264,7 +264,7 @@ struct WidgetGroupedListView: View {
         }
         Divider()
         if let provider = layout.provider(id: providerID) {
-            Button("Refresh \(provider.displayName)") {
+            Button(L10n.format("Refresh %@", provider.displayName)) {
                 Task { await dataStore.refresh(providerID: providerID, force: true) }
             }
         }

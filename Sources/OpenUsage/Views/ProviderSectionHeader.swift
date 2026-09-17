@@ -75,7 +75,7 @@ struct ProviderSectionHeader: View {
                 // precise age rides in the hover tooltip. Hidden while a refresh is in flight: the spinner
                 // already says "working on it".
                 if let staleness, !refreshing {
-                    Text(staleness.label)
+                    Text(localized: staleness.label)
                         .font(.system(size: density.planBadgePointSize))
                         .foregroundStyle(.tertiary)
                         .lineLimit(1)

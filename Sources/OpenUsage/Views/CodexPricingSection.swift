@@ -27,7 +27,7 @@ struct CodexPricingSection: View {
                             Text(localized: "Unavailable Model").tag(selectedModel)
                         }
                         ForEach(options) { option in
-                            Text(option.title).tag(option.id)
+                            Text(localized: option.title).tag(option.id)
                         }
                     }
                     .pickerStyle(.menu)
@@ -40,7 +40,7 @@ struct CodexPricingSection: View {
                     HStack(spacing: 6) {
                         MotionAwareProgressView(controlSize: .mini)
                             .accessibilityHidden(true)
-                        Text(activityLabel)
+                        Text(localized: activityLabel)
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)

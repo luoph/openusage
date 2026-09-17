@@ -67,6 +67,26 @@ final class LocalizationTests: XCTestCase {
         XCTAssertTrue(noops.isEmpty, "redundant entries: \(noops.keys.sorted())")
     }
 
+    /// A format string's translation must keep the same placeholders: `String(format:)` silently drops
+    /// the argument when one goes missing, so "刷新 %@" losing its %@ would render as a bare "刷新".
+    func testFormatPlaceholdersSurviveTranslation() {
+        for (english, chinese) in ChineseStrings.table {
+            for token in ["%@", "%d"] where english.contains(token) {
+                XCTAssertEqual(
+                    chinese.components(separatedBy: token).count,
+                    english.components(separatedBy: token).count,
+                    "\(token) count differs for \"\(english)\" → \"\(chinese)\""
+                )
+            }
+        }
+    }
+
+    func testFormatSubstitutesIntoTheTranslation() {
+        XCTAssertEqual(L10n.t("Refresh %@", language: .chinese), "刷新 %@")
+        XCTAssertEqual(String(format: L10n.t("Refresh %@", language: .chinese), "Claude"), "刷新 Claude")
+        XCTAssertEqual(String(format: L10n.t("%d metrics", language: .chinese), 4), "4 个指标")
+    }
+
     func testTableHasNoEmptyValues() {
         let empties = ChineseStrings.table.filter { $0.value.trimmingCharacters(in: .whitespaces).isEmpty }
         XCTAssertTrue(empties.isEmpty, "empty translations: \(empties.keys.sorted())")

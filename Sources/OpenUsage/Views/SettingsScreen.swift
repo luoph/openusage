@@ -348,7 +348,7 @@ struct SettingsScreen: View {
                     Task { await refreshNotificationsAuth() }
                 }
             } label: {
-                Text(notificationsAuth == .denied ? "Open System Settings" : "Allow Notifications")
+                Text(localized: notificationsAuth == .denied ? "Open System Settings" : "Allow Notifications")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
@@ -454,7 +454,7 @@ struct SettingsScreen: View {
             .controlSize(.regular)
             .padding(.horizontal, 12)
             .padding(.vertical, density.controlRowPadding)
-            .alert("Reset All Settings?", isPresented: $isPresentingResetConfirm) {
+            .alert(L10n.t("Reset All Settings?"), isPresented: $isPresentingResetConfirm) {
                 Button("Reset", role: .destructive) {
                     withAnimation(Motion.spring) { container.resetAllSettings() }
                     launchAtLogin.update(to: false)
@@ -472,7 +472,7 @@ struct SettingsScreen: View {
     /// Glass on macOS 26+, bordered fallback on macOS 15.
     private func logButton(_ title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Text(title).frame(maxWidth: .infinity)
+            Text(localized: title).frame(maxWidth: .infinity)
         }
         .glassButtonStyle()
         .controlSize(.regular)

@@ -18,7 +18,7 @@ struct TransientPill: View {
         HStack(spacing: 5) {
             Image(systemName: systemImage)
                 .font(.system(size: 11, weight: .semibold))
-            Text(text)
+            Text(localized: text)
                 .font(.system(size: 12, weight: .semibold))
         }
         .foregroundStyle(tint)

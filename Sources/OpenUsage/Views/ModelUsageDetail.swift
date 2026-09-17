@@ -39,7 +39,7 @@ struct ModelUsageDetail: View {
     }
 
     private var header: some View {
-        Text(title)
+        Text(localized: title)
             .font(.system(size: density.headerPointSize, weight: .semibold))
             .foregroundStyle(.primary)
     }

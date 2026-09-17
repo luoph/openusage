@@ -27,7 +27,7 @@ struct UsageSparkline: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            Text(data.title)
+            Text(localized: data.title)
                 .font(.system(size: density.supportingPointSize, weight: .semibold))
                 .foregroundStyle(.primary)
                 .lineLimit(1)

@@ -33,7 +33,7 @@ struct ProviderListRow<Handle: View>: View {
                         .font(.system(size: density.headerPointSize, weight: .semibold))
                         .foregroundStyle(.primary)
                         .lineLimit(1)
-                    Text("\(metricCount) metrics")
+                    Text(L10n.format("%d metrics", metricCount))
                         .font(.system(size: density.planBadgePointSize))
                         .foregroundStyle(.secondary)
                 }

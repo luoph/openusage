@@ -145,7 +145,7 @@ struct WidgetRowView: View {
                          action: eta == nil ? nil : onToggleResetDisplay)
         case .closeToLimit(let spare, _):
             Spacer(minLength: 8)
-            Text(spare)
+            Text(localized: spare)
                 .font(supportingFont)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
@@ -158,7 +158,7 @@ struct WidgetRowView: View {
             // already *is* the projection the amber case hides in its tooltip.
             if let projection = state.tooltip {
                 Spacer(minLength: 8)
-                Text(projection)
+                Text(localized: projection)
                     .font(supportingFont)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -183,7 +183,7 @@ struct WidgetRowView: View {
                 .foregroundStyle(severityColor(state.severity))
                 .accessibilityHidden(true) // the warning text alongside carries the message
             if let text {
-                Text(text)
+                Text(localized: text)
                     .font(supportingFont)
                     .lineLimit(1)
                     .fixedSize(horizontal: true, vertical: false)
@@ -247,12 +247,12 @@ struct WidgetRowView: View {
         if let text = data.boundedTrailingText() {
             if data.hasResetLabel(), let onToggleResetDisplay {
                 Button(action: onToggleResetDisplay) {
-                    Text(text).foregroundStyle(.secondary)
+                    Text(localized: text).foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
                 .hoverTooltip(data.resetTooltip())
             } else {
-                Text(text).foregroundStyle(.secondary)
+                Text(localized: text).foregroundStyle(.secondary)
                     .hoverTooltip(data.resetTooltip())
             }
         }

@@ -435,7 +435,9 @@ private struct TooltipBubble: View {
 
     @ViewBuilder
     private var label: some View {
-        let content = Text(text)
+        // Translated here rather than at each `.hoverTooltip(…)` call site, so both literal tooltips
+        // and the ones handed in as provider-produced strings go through the table.
+        let content = Text(localized: text)
             .font(.system(size: 12))
             .foregroundStyle(.primary)
             .multilineTextAlignment(.center)

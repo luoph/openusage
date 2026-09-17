@@ -138,7 +138,7 @@ struct RateLimitResetsDetail: View {
                 .font(.system(size: 20))
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
-            Text("\(count) available")
+            Text(L10n.format("%d available", count))
                 .font(.system(size: density.supportingPointSize))
                 .foregroundStyle(.primary)
             Text(localized: "Expiry times unavailable")
@@ -245,7 +245,7 @@ struct RateLimitResetsDetail: View {
 
     private func row(_ entry: Entry) -> some View {
         HStack(spacing: 8) {
-            Text(entry.time)
+            Text(localized: entry.time)
                 .font(.system(size: density.supportingPointSize))
                 .foregroundStyle(.primary)
                 .lineLimit(1)
@@ -341,7 +341,7 @@ struct RateLimitResetsDetail: View {
                 .font(.system(size: 14))
                 .foregroundStyle(banner.tint)
                 .accessibilityHidden(true)
-            Text(banner.text)
+            Text(localized: banner.text)
                 .font(.system(size: density.supportingPointSize, weight: .medium))
                 .foregroundStyle(banner.tint)
                 .fixedSize(horizontal: false, vertical: true)

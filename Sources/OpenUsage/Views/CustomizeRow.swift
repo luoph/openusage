@@ -20,7 +20,7 @@ struct CustomizeMetricRow<Handle: View, Trailing: View>: View {
     var body: some View {
         HStack(spacing: 10) {
             handle(AnyView(ReorderGrip()))
-            Text(title)
+            Text(localized: title)
                 .foregroundStyle(.primary)
             Spacer(minLength: 8)
             trailing

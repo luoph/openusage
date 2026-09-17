@@ -74,11 +74,31 @@ enum ChineseStrings {
         "Reset All Customization": "重置所有自定义",
         "Total Spend": "总花费",
         "Total Spend Metric": "总花费指标",
+        // Total Spend's title menu and its period switcher. "30 Days" is the switcher's compact form
+        // of "Last 30 Days" — three segments have to fit across the 320pt popover.
+        "Cost": "花费",
+        "Cost/MTok": "MTok 单价",
+        "Tokens": "Token 数",
+        "30 Days": "30 天",
         "No spend data": "无花费数据",
         "No cost data for this period": "该时间段没有成本数据",
         "No cost-per-token data for this period": "该时间段没有单位成本数据",
         "No token data for this period": "该时间段没有 token 数据",
         "This period used a model with unknown pricing": "这个时间段用到了价格未知的模型",
+
+        // Hover-popover source notes: where a spend figure came from, and whether it is imputed.
+        // Codex's multi-source note is assembled at runtime ("From your <a> and <b> (estimated)"),
+        // so it has no fixed string to key on and stays English.
+        "From your pi logs (estimated)": "来自你的 pi 日志（估算）",
+        "From your Claude usage history (estimated)": "来自你的 Claude 用量历史（估算）",
+        "From your Claude usage history and pi (estimated)": "来自你的 Claude 用量历史和 pi（估算）",
+        "From your Codex logs (estimated)": "来自你的 Codex 日志（估算）",
+        "From your Grok logs (estimated)": "来自你的 Grok 日志（估算）",
+        "From your Antigravity conversations (estimated)": "来自你的 Antigravity 会话（估算）",
+        "From your OpenCode logs": "来自你的 OpenCode 日志",
+        "From your Cursor usage export": "来自你的 Cursor 用量导出",
+        "From your Cursor usage history.": "来自你的 Cursor 用量历史。",
+        "Estimated locally, so it may be off": "本地估算，可能有偏差",
         "You have no rate limit resets": "你没有可用的速率重置",
         "Expiry times unavailable": "过期时间不可用",
         "Use this reset?": "使用这次重置？",
@@ -86,6 +106,15 @@ enum ChineseStrings {
         "Resetting your usage…": "正在重置用量…",
         "Back": "返回",
         "Hide": "隐藏",
+        // Right-click menus on a provider header and on a metric row. `%@` / `%d` are filled by
+        // `L10n.format`, so the placeholder has to survive translation.
+        "Hide %@": "隐藏 %@",
+        "Refresh %@": "刷新 %@",
+        "Star for menu bar": "固定到菜单栏",
+        "Unstar": "取消固定",
+        "%d metrics": "%d 个指标",
+        "%d available": "%d 个可用",
+        "Updated %@": "更新于 %@",
         "Dismiss": "忽略",
         "Options": "选项",
         "Cancel": "取消",
@@ -93,7 +122,31 @@ enum ChineseStrings {
         "Use": "使用",
         "Reset": "重置",
         "None": "无",
-        "Unavailable": "不可用"
+        "Unavailable": "不可用",
+
+        // Footer status and the update banner.
+        "Updating…": "更新中…",
+        "Next update in %dm": "%d 分钟后更新",
+        "Next update in %ds": "%d 秒后更新",
+        "Copied to clipboard": "已复制到剪贴板",
+        "Install Update": "安装更新",
+        "OpenUsage %@ is ready to download.": "OpenUsage %@ 已可下载。",
+
+        // Customize: the transient pill shown after starring / unstarring a metric.
+        "Starred for menu bar": "已固定到菜单栏",
+        "Removed from menu bar": "已从菜单栏移除",
+        "Up to 2 stars per provider": "每个服务商最多固定 2 项",
+        "Show more": "展开",
+        "Show less": "收起",
+        "Reset All Customization?": "重置所有自定义？",
+
+        // Codex reset credits (the resets popover).
+        "Expiring soon": "即将过期",
+        "Nothing to reset right now": "当前没有可重置的项",
+        "Your usage doesn't need a reset yet": "你的用量还不需要重置",
+        "Reset claimed. Enjoy!": "重置已领取，尽情使用！",
+        "That reset is no longer available": "该重置已不可用",
+        "Couldn't reset usage. Please try again.": "重置用量失败，请重试。"
     ]
 
     // MARK: - Settings
@@ -154,6 +207,23 @@ enum ChineseStrings {
         "Reset All Settings…": "重置所有设置…",
         "Cost Estimates": "成本估算",
         "Fallback Model": "回落模型",
+        "Loading Models…": "正在加载模型…",
+        "Recalculating Estimates…": "正在重新计算估算…",
+        "Allow Notifications": "允许通知",
+        "Open System Settings": "打开系统设置",
+        "Reset All Settings?": "重置所有设置？",
+        "Couldn't copy the log path to the clipboard.": "无法复制日志路径到剪贴板。",
+
+        // Settings → API Keys (OpenRouter / Z.ai).
+        "Override With a Custom Key": "使用自定义 Key 覆盖",
+        "From Your Environment": "来自环境变量",
+        "Saved in App": "已保存在应用内",
+        "Custom Key": "自定义 Key",
+        "Add": "添加",
+        "Edit": "编辑",
+        "Clear": "清除",
+        "Show": "显示",
+        "Done": "完成",
         "Estimate costs for models that don't have known pricing.": "为没有已知价格的模型估算成本。",
         "Unavailable Model": "不可用的模型",
         "This model's pricing is unavailable. Choose another model or None.":
@@ -167,6 +237,11 @@ enum ChineseStrings {
         "Sync Across Macs": "跨 Mac 同步",
         "This Mac": "这台 Mac",
         "Syncing usage history": "正在同步用量历史",
+        // Relative age of the last sync, fed into "Updated %@".
+        "just now": "刚刚",
+        "%dm ago": "%d 分钟前",
+        "%dh ago": "%d 小时前",
+        "%dd ago": "%d 天前",
         "Waiting for this Mac’s first iCloud update…": "等待这台 Mac 的首次 iCloud 更新…"
     ]
 
@@ -188,6 +263,14 @@ enum ChineseStrings {
         "Used": "已用",
         "Remaining": "剩余",
         "Limit reached": "已达上限",
+        // Hover copy on a meter: the pace projection, and the aged-snapshot hint beside a provider name.
+        "Outdated": "已过期",
+        "Reset %@": "重置 %@",
+        "Unknown model found": "发现价格未知的模型",
+        "Unknown models found": "发现多个价格未知的模型",
+        "Alert when a limit drops below 10% remaining.": "额度剩余低于 10% 时提醒。",
+        "Alert when a limit is projected to finish before it resets.": "预计额度在重置前用尽时提醒。",
+        "Alert when a limit is projected to finish with little left.": "预计额度重置时所剩无几时提醒。",
         "Not started": "未开始",
         "Refresh failed": "刷新失败"
     ]
