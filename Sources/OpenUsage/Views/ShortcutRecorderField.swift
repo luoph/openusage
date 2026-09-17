@@ -79,14 +79,14 @@ struct ShortcutRecorderField: View {
     @ViewBuilder
     private var chipContent: some View {
         if isRecording {
-            Text("Type Shortcut…")
+            Text(localized: "Type Shortcut…")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         } else if let currentShortcut {
             Text(currentShortcut.description)
                 .font(.system(.callout, design: .monospaced))
         } else {
-            Text("Record Shortcut")
+            Text(localized: "Record Shortcut")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }

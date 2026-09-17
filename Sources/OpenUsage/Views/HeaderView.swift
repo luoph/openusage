@@ -60,7 +60,7 @@ struct HeaderView: View {
             menuItems
         } label: {
             HStack(spacing: 5) {
-                Text("Options")
+                Text(localized: "Options")
                     .font(.system(size: 13, weight: .semibold))
                 Image(systemName: "chevron.down")
                     .font(.system(size: 11, weight: .semibold))
@@ -86,12 +86,12 @@ struct HeaderView: View {
     @ViewBuilder
     private var menuItems: some View {
         Button { toggle(.customize) } label: {
-            Label("Customize", systemImage: "slider.horizontal.3")
+            Label(L10n.t("Customize"), systemImage: "slider.horizontal.3")
         }
         .keyboardShortcut(.return, modifiers: [])
 
         Button { toggle(.settings) } label: {
-            Label("Settings", systemImage: "gearshape")
+            Label(L10n.t("Settings"), systemImage: "gearshape")
         }
         .keyboardShortcut(",")
 
@@ -100,17 +100,17 @@ struct HeaderView: View {
         shareScreenshotMenu
 
         Button { updater.checkForUpdates() } label: {
-            Label("Check for Updates…", systemImage: "arrow.triangle.2.circlepath")
+            Label(L10n.t("Check for Updates…"), systemImage: "arrow.triangle.2.circlepath")
         }
         .disabled(!updater.canCheckForUpdates)
 
         Divider()
 
         Button { AboutPanel.present() } label: {
-            Label("About OpenUsage", systemImage: "info.circle")
+            Label(L10n.t("About OpenUsage"), systemImage: "info.circle")
         }
         Button(role: .destructive) { NSApplication.shared.terminate(nil) } label: {
-            Label("Quit OpenUsage", systemImage: "power")
+            Label(L10n.t("Quit OpenUsage"), systemImage: "power")
         }
         .keyboardShortcut("q") // ⌘Q — unowned elsewhere, so safe to register on the item.
     }
@@ -128,7 +128,7 @@ struct HeaderView: View {
             if groups.isEmpty {
                 // No provider is showing anything to screenshot — grey the item out instead of offering
                 // an empty submenu.
-                Button("No Enabled Providers") {}
+                Button(L10n.t("No Enabled Providers")) {}
                     .disabled(true)
             } else {
                 ForEach(groups) { group in
@@ -136,7 +136,7 @@ struct HeaderView: View {
                 }
             }
         } label: {
-            Label("Share Screenshot", systemImage: "square.and.arrow.up")
+            Label(L10n.t("Share Screenshot"), systemImage: "square.and.arrow.up")
         }
     }
 

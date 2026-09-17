@@ -79,7 +79,7 @@ struct PopoverTopBar: View {
 
     private func backButton(action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Label("Back", systemImage: "chevron.backward")
+            Label(L10n.t("Back"), systemImage: "chevron.backward")
                 .labelStyle(.iconOnly)
                 .frame(width: 16, height: 16)
         }

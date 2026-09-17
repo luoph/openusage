@@ -84,7 +84,7 @@ struct CustomizeProviderDetailView: View {
             .frame(height: 30)
             .padding(8)
             .overlay(
-                Text("Drag metrics here")
+                Text(localized: "Drag metrics here")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             )

@@ -61,7 +61,10 @@ final class StatusItemController: NSObject {
 
         let hosting = NSHostingController(
             rootView: AnyView(
-                DashboardView()
+                // Rebuilds the tree when the UI language changes, so every translated string re-reads.
+                LocalizedRoot {
+                    DashboardView()
+                }
                     // Own the preference outside `DashboardView` so the view can read the resolved
                     // value while deciding whether to mount its two-page transition structure.
                     .reduceAnimationsWhenRequested()

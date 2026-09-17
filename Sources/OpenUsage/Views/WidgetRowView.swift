@@ -118,7 +118,7 @@ struct WidgetRowView: View {
     /// Hovering shows the pace projection at reset. The warning gets the space; the title truncates.
     private func boundedLabelRow(_ state: WidgetData.MeterState) -> some View {
         HStack(spacing: 6) {
-            Text(data.title)
+            Text(localized: data.title)
                 .font(labelFont)
                 .foregroundStyle(.primary)
                 .lineLimit(1)
@@ -301,7 +301,7 @@ struct WidgetRowView: View {
             VStack(alignment: .trailing, spacing: 2) {
                 HStack(spacing: 4) {
                     expiryStatusDot
-                    Text(data.unboundedDetail)
+                    Text(localized: data.unboundedDetail)
                         .font(supportingFont)
                         .foregroundStyle(.primary) // the value is the row's payload — match the bounded headline
                         .contentTransition(.numericText())
@@ -320,7 +320,7 @@ struct WidgetRowView: View {
                 if let subtitle = data.unboundedSubtitle {
                     // Secondary, not tertiary: the subtitle is informational ("on-device estimate"),
                     // and tertiary is reserved for inactive content on glass.
-                    Text(subtitle)
+                    Text(localized: subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -412,7 +412,7 @@ struct WidgetRowView: View {
 
     private var labelColumn: some View {
         HStack(spacing: 4) {
-            Text(data.title)
+            Text(localized: data.title)
                 // Same point size as the trailing value so the single-line row reads tight;
                 // semibold alone keeps the name/value hierarchy.
                 .font(.system(size: density.supportingPointSize, weight: .semibold))

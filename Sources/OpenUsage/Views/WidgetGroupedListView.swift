@@ -68,11 +68,11 @@ struct WidgetGroupedListView: View {
             Button("Refresh \(group.provider.displayName)") {
                 Task { await dataStore.refresh(providerID: group.provider.id, force: true) }
             }
-            Button("Customize…") {
+            Button(L10n.t("Customize…")) {
                 openCustomize(for: group.provider.id)
             }
             Divider()
-            Button("Share Screenshot") { _ = shareCard(group) }
+            Button(L10n.t("Share Screenshot")) { _ = shareCard(group) }
         }
     }
 
@@ -248,7 +248,7 @@ struct WidgetGroupedListView: View {
     /// star, then a divider before the two provider-/app-level actions.
     @ViewBuilder
     private func rowMenu(_ descriptor: WidgetDescriptor, providerID: String) -> some View {
-        Button("Hide") {
+        Button(L10n.t("Hide")) {
             layout.setMetricEnabled(descriptor.id, false)
         }
         if descriptor.pinnable {
@@ -268,7 +268,7 @@ struct WidgetGroupedListView: View {
                 Task { await dataStore.refresh(providerID: providerID, force: true) }
             }
         }
-        Button("Customize…") {
+        Button(L10n.t("Customize…")) {
             openCustomize(for: providerID)
         }
     }

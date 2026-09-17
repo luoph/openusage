@@ -137,7 +137,7 @@ struct TotalSpendCard: View {
         .animation(Motion.spring, value: periodRawValue)
         .animation(Motion.spring, value: metricRawValue)
         .contextMenu {
-            Button("Share Screenshot") {
+            Button(L10n.t("Share Screenshot")) {
                 ShareCardRenderer.shareTotalSpend(
                     total: total,
                     metric: metric,
