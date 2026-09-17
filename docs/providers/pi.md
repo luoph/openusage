@@ -18,6 +18,11 @@ for (DeepSeek, an OpenAI-compatible endpoint, a local gateway) can show up at al
 There are no quota meters: pi has no account and no usage API — it's a local CLI — so there is nothing
 to meter against. The spend tiles and trend are the whole card.
 
+Hover a spend tile for the per-model breakdown. Because this one card mixes providers, every model says
+which one billed it — `deepseek-flash · DeepSeek`, `claude-opus-4-8 · Claude`. That keeps the same model
+name reached two ways (a vendor's own API and a gateway like OpenRouter) as two rows, since they bill
+separately. A provider OpenUsage doesn't recognize keeps pi's own name for it, unchanged.
+
 ## Where the data comes from
 
 Use pi as usual. OpenUsage reads its session logs under `~/.pi/agent/sessions/`, honoring pi's own

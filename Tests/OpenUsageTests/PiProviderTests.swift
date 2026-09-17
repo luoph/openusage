@@ -67,7 +67,8 @@ final class PiProviderTests: XCTestCase {
         XCTAssertEqual(today.first(where: { $0.label == "tokens" })?.number, 300)
 
         let models = try XCTUnwrap(snapshot.usageHistory?.modelUsage?.daily.first?.models.map(\.model))
-        XCTAssertEqual(Set(models), ["deepseek-flash", "claude-opus-4-8"])
+        // Each model says which provider billed it — the pi card is the one place they mix.
+        XCTAssertEqual(Set(models), ["deepseek-flash · DeepSeek", "claude-opus-4-8 · Claude"])
     }
 
     @MainActor

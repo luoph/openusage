@@ -169,11 +169,18 @@ actor PiUsageScanner {
         estimateCost: CostEstimator? = nil
     ) -> LogUsageScan {
         let estimate = estimateCost ?? { pricing.estimatedCostDollars(model: $0, tokens: $1) }
+        // Only the pi card mixes providers in one breakdown, so only it needs the provider label; a
+        // provider card's rows are that provider's by definition.
+        let labelsProvider = cardID == nil
         var accumulator = DailyUsageAccumulator()
         for entry in entries where (cardID == nil || entry.cardID == cardID) && entry.timestamp >= since {
             let day = DailyUsageAccumulator.dayKey(from: entry.timestamp)
             let trimmedModel = entry.model.nilIfEmpty
-            let modelName = trimmedModel ?? ModelUsageEntry.unattributedModelName
+            // Display name only — pricing always looks up pi's raw model id below.
+            let displayModel = trimmedModel.map {
+                labelsProvider ? PiProviderMapping.modelLabel(model: $0, piProvider: entry.piProvider) : $0
+            }
+            let modelName = displayModel ?? ModelUsageEntry.unattributedModelName
 
             let cost: Double
             if let carried = entry.carriedCost, carried > 0 {
@@ -181,7 +188,7 @@ actor PiUsageScanner {
             } else if let model = trimmedModel, let estimated = estimate(model, entry.tokens) {
                 cost = estimated
             } else {
-                if let model = trimmedModel, entry.reportedTotalTokens > 0 {
+                if let model = displayModel, entry.reportedTotalTokens > 0 {
                     accumulator.addUnknownModel(day: day, model: model)
                 }
                 continue
